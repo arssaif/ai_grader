@@ -335,7 +335,7 @@ Authentication: Required (Session-based)
 - **PyYAML**: Configuration management
 
 ## 📸 Youtube Demo
-https://youtu.be/DOOb9337-p4?si=7p7BSfMw5ZRyT9Xk
+[![Demo Video](https://img.youtube.com/vi/DOOb9337-p4/0.jpg)](https://www.youtube.com/watch?v=DOOb9337-p4&autoplay=1)
 
 ## 🤝 Contributing
 
