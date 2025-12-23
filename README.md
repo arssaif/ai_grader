@@ -17,7 +17,7 @@ A comprehensive AI-powered web application for automated chest X-ray analysis, p
 - [AI Models](#-ai-models)
 - [API Documentation](#-api-documentation)
 - [Technologies Used](#-technologies-used)
-- [Screenshots](#-screenshots)
+- [Youtube Demo](#-youtube-demo)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -334,14 +334,8 @@ Authentication: Required (Session-based)
 - **joblib**: Model serialization
 - **PyYAML**: Configuration management
 
-## 📸 Screenshots
-
-> Add screenshots of your application here:
-> - Login page
-> - Dashboard
-> - Upload interface
-> - Analysis results
-> - Full diagnostic report
+## 📸 Youtube Demo
+https://youtu.be/DOOb9337-p4?si=7p7BSfMw5ZRyT9Xk
 
 ## 🤝 Contributing
 
@@ -358,13 +352,9 @@ Contributions are welcome! Please follow these steps:
 - Add docstrings to all functions and classes
 - Write meaningful commit messages
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 👨‍💻 Authors
 
-- **Your Name** - *Initial work* - [YourGitHub](https://github.com/yourusername)
+- **Arslan Saif** - *Initial work* - [Arslan Saif](https://github.com/arssaif)
 
 ## 🙏 Acknowledgments
 
