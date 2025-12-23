@@ -308,9 +308,10 @@ def predict(image_1,model_tokenizer):
     else:
         print("No Image")
 
-
-
-def caption_g(p1,user_id):
+def caption_g(p1, user_id):
+    """
+    Generates and formats a caption for a specific patient image.
+    """
     model_tokenizer = create_model()
     test_im ='static/Patient_images/'+ p1   # atelectasis| effusion| emphysema| infiltration
     c = predict(test_im, model_tokenizer)

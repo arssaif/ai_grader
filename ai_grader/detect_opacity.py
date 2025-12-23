@@ -21,6 +21,21 @@ global device
 
 
 def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleFill=False, scaleup=True, stride=32):
+    """
+    Resizes and pads an image while meeting stride-multiple constraints.
+
+    Args:
+        im (numpy.ndarray): Input image.
+        new_shape (int or tuple): Target shape (height, width).
+        color (tuple): Padding color.
+        auto (bool): Minimum rectangle padding.
+        scaleFill (bool): Stretch to fill.
+        scaleup (bool): Allow scaling up.
+        stride (int): Stride multiple constraint.
+
+    Returns:
+        tuple: (resized and padded image, (width ratio, height ratio), (width padding, height padding))
+    """
     # Resize and pad image while meeting stride-multiple constraints
     shape = im.shape[:2]  # current shape [height, width]
     if isinstance(new_shape, int):
@@ -52,9 +67,16 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleF
     im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)  # add border
     return im, ratio, (dw, dh)
 
-#plot result
 
 def draw_plot(filename, path, title):
+    """
+    Plots an image with a title and saves it to a specified path.
+
+    Args:
+        filename (numpy.ndarray): The image data to plot.
+        path (str): The file path where the plot will be saved.
+        title (str): The title of the plot.
+    """
     # load the image
     #data = pyplot.imread(filename)
     # plot the image
@@ -68,9 +90,16 @@ def draw_plot(filename, path, title):
     pyplot.cla()
     pyplot.close()
 
-# load model
-# get fdetections
+
 def opacity(adder,newName,user_id):
+    """
+    Detects opacity in a medical image using a YOLO model and saves the result.
+
+    Args:
+        adder (str): The filename of the input image located in the patient images directory.
+        newName (str): The name to use for the saved output image.
+        user_id (int or str): The ID of the user, used to create a specific directory for results.
+    """
     pyplot.clf()
     pyplot.cla()
     pyplot.close()
@@ -140,4 +169,3 @@ def opacity(adder,newName,user_id):
         os.makedirs('static/opacity/User' + str(user_id))
     path1 = 'static/opacity/User' + str(user_id) + '/' + newName + '.jpg'
     draw_plot(img_main, path1, title)
-

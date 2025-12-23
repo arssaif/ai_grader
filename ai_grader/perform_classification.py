@@ -13,6 +13,15 @@ import cv2
 APP_ROOT= os.path.dirname(os.path.abspath(__file__))
 
 def model_working(adder):
+    """
+    Loads a pre-trained EfficientNetB4 model and performs inference on a single image.
+
+    Args:
+        adder (str): Local file path to the image to be classified.
+
+    Returns:
+        tuple: (classes_sorted, predictions_sorted) sorted by probability in descending order.
+    """
     classes = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule',
                'Pneumothorax', 'Consolidation', 'Edema', 'Emphysema',
                'Pleural_Thickening', 'No Finding']
@@ -35,6 +44,17 @@ def model_working(adder):
     return classes_sorted, predictions_sorted
 
 def predict(p1, newName, user_id):
+    """
+    Analyzes an image for diseases, generates a probability bar chart, and saves the plot.
+
+    Args:
+        p1 (str): The filename of the input image located in the static patient images directory.
+        newName (str): The filename to be used for the generated probability plot.
+        user_id (int/str): The identifier for the user to organize output files.
+
+    Returns:
+        tuple: (finding, path1) where 'finding' is the top predicted disease and 'path1' is the plot file path.
+    """
     plt.clf()
     plt.cla()
     plt.close()
@@ -95,4 +115,3 @@ def predict(p1, newName, user_id):
     plt.close()
     path1= 'static/classification/User'+ str(user_id)+'/' + newName + '.jpg'
     return finding, path1
-
