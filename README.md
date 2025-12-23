@@ -157,7 +157,7 @@ FYP_WebApp/
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.10
 - NVIDIA GPU with CUDA support (recommended for faster inference)
 - 8GB+ RAM
 - 10GB+ free disk space

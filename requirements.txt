@@ -10,11 +10,8 @@ torch==2.1.2
 tensorflow==2.15.0
 joblib
 opencv-python
-keras
 matplotlib
 pandas
-efficientnet
-mrcnn
 gunicorn
 psycopg2
 nltk
