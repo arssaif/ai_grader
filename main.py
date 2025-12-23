@@ -18,6 +18,7 @@ APP_ROOT= os.path.dirname(os.path.abspath(__file__))
 #LOGIN PAGE
 @app.route('/login')
 def login():
+    """Handle user login and redirect based on user role."""
     if request.method == 'POST':
         session['email'] = request.form['email']
         User_Type = get_usertype(request.form['email'])
@@ -30,23 +31,27 @@ def login():
 # SIGN-UP PAGE
 @app.route('/signup')
 def signup():
+    """Render the sign-up page."""
     return render_template('signup.html')
 
 # WELCOME PAGE
 @app.route('/welcome')
 def welcome():
+    """Render the welcome page."""
     return render_template('welcome.html')
 
 #CONTACT PAGE
 @app.route('/contact')
 #@login_required
 def contact():
+    """Render the contact information page."""
     return render_template('contact.html')
 
 #ABOUT PAGE
 @app.route('/about')
 #@login_required
 def about():
+    """Render the about page."""
     return render_template('about.html')
 
 #HOME PAGE
@@ -54,7 +59,7 @@ def about():
 @app.route('/home')
 @login_required
 def home():
-
+    """Render the home page for authorized users, displaying their uploaded images."""
     print(current_user)
     user_name=get_username(int(current_user.get_id()))
     any_uploads = ''
@@ -64,6 +69,7 @@ def home():
 @app.route('/AdminHome')
 @login_required
 def AdminHome():
+    """Render the administrator home page, displaying user management information."""
     user_name = get_username(int(current_user.get_id()))
     print(current_user)
     any_uploads = ''
@@ -72,6 +78,7 @@ def AdminHome():
 
 @app.route("/upload", methods=['POST'])
 def upload():
+    """Handle patient image uploads and save them to the user's directory."""
     user_id = int(current_user.get_id())
     if not os.path.exists('static/Patient_images/User'+str(user_id)):
         os.makedirs('static/Patient_images/User'+str(user_id))
@@ -95,6 +102,7 @@ def upload():
 
 @app.route("/reg_doctor", methods=['GET', 'POST'])
 def reg_doctor():
+    """Register a new doctor in the system."""
     fname = request.form.get("fname")
     lname = request.form.get("lname")
     email = request.form.get("email")
@@ -105,6 +113,7 @@ def reg_doctor():
 
 @app.route('/patient_name', methods=['GET', 'POST'])
 def get_id():
+    """Retrieve patient ID or redirect to the home page if not found."""
     p_name = request.form.get("patient_name")
     print(p_name)
     if p_name != 'False':
@@ -113,6 +122,7 @@ def get_id():
 
 @app.route('/getdat')
 def getdata():
+    """Retrieve analysis data, including captions, predictions, and heatmaps for a patient image."""
     user_id = str(int(current_user.get_id()))
     p_name= request.args.get("p_name")
     path = getpath(p_name)
@@ -123,9 +133,9 @@ def getdata():
     print(path)
     print(caption)
     return jsonify({"image_name": p_name, "path" : path, "caption" : caption, "finding" : finding})
-
 @app.route('/getsegment')
 def get_segment():
+    """Perform image segmentation for a specific patient image."""
     user_id = str(int(current_user.get_id()))
     p_name = request.args.get("p_name")
     path = getpath(p_name)
@@ -135,6 +145,7 @@ def get_segment():
 
 @app.route('/opacity')
 def get_opacity():
+    """Analyze a patient image for opacities."""
     user_id = str(int(current_user.get_id()))
     p_name = request.args.get("p_name")
     path = getpath(p_name)
@@ -144,6 +155,7 @@ def get_opacity():
 
 @app.route('/external_devices')
 def external_devices():
+    """Detect external devices in a patient image."""
     user_id = str(int(current_user.get_id()))
     p_name = request.args.get("p_name")
     path = getpath(p_name)
@@ -153,6 +165,7 @@ def external_devices():
 
 @app.route('/get_full_report')
 def get_full_report():
+    """Generate a complete diagnostic report including all analyses for a patient image."""
     user_id = str(int(current_user.get_id()))
     p_name = request.args.get("p_name")
     path = getpath(p_name)
@@ -175,15 +188,16 @@ def get_full_report():
     
 @app.route('/get_email')
 def get_email():
+    """Delete a user account using the provided email address."""
     u_email = request.args.get("u_email")
     delete_user(u_email)
     return 'ok'
 
 @app.route('/logout')
 def logout():
+    """Log out the current user and redirect to the login page."""
     logout_user()
     return redirect(url_for('login'))
 
-# MAIN
 if __name__ == '__main__':
     app.run(debug=True)
