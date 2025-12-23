@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login page</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+
+  <title>AI Grader</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'css_files/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'css_files/bar.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="https://kit.fontawesome.com/6865b98c37.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"
+    integrity="sha256-c9vxcXyAG4paArQG3xk6DjyW/9aHxai2ef9RpMWO44A=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+  <style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: "Poppins", sans-serif
+    }
+
+    body {
+      font-size: 16px;
+    }
+
+    .w3-half img {
+      margin-bottom: -6px;
+      margin-top: 16px;
+      opacity: 0.8;
+      cursor: pointer
+    }
+
+    .w3-half img:hover {
+      opacity: 1
+    }
+
+    .button {
+      background-color: #f44336;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 16px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    .button5:hover {
+      background-color: #555555;
+      color: white
+    }
+
+    .ab {
+      display: inline
+    }
+  </style>
+
+</head>
+
+<body style="background-image:url({{url_for('static',filename='image/loginbackground.jpg')}}); background-size:cover;">
+  <div class="w3-top">
+    <div class="w3-row w3-padding w3-black">
+      <div class="w3-col s2">
+        <a href="welcome" class="w3-button w3-block w3-black">WELCOME</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="home" class="w3-button w3-block w3-black">HOME</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="about" class="w3-button w3-block w3-black">ABOUT</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="contact" class="w3-button w3-block w3-black">CONTACT US</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="signup" class="w3-button w3-block w3-black">SIGN UP</a>
+      </div>
+    </div>
+  </div>
+  <div style=" width: cover;text-align: right; font-family:Times New Roman; background-color: rgba(20, 100, 130, 0.70);
+  height: 30px;" class="topnav">
+    <a style="text-decoration: none;  color: white; font-size:114%; padding-right: 30px;" class="active"
+      href="signup">Sign-up</a>
+    <a style="text-decoration: none; color: white; font-size:114%; padding-right: 30px;" href="#services">Services</a>
+    <a style="text-decoration: none; color: white; font-size:114%; padding-right: 30px;" href="contact">Contact</a>
+    <a style="text-decoration: none; color: white; font-size:114%; padding-right: 20px;" class="active"
+      href="#about">About</a>
+  </div>
+  <h1 style=" text-shadow: 0 0 20px black;
+            text-align:center;
+            font-family:Times New Roman;
+            color:white;
+            width:cover;
+            font-size:490%;
+            margin-top: 40px;
+            font-weight: bold;">
+    WELCOME TO AI GRADER</h1>
+  <h2 style=" text-shadow: 0 0 20px black;
+            text-align:center;
+            font-family:Times New Roman;
+            color:white;  
+            width:cover;
+            font-size:300%;
+            margin-top: 40px;
+            font-weight: bold;">
+    Helping Radiologists <br><br></h2>
+
+  <div style="width: 100%; display: flex; justify-content: center;">
+    <form action="#" method="post" enctype="multipart/form-data" class="container-mid w3-padding-large"
+      style="margin: auto; width: fit-content;" id="LoginUser">
+      <div style="text-align: center;">
+        <h2 style="color:white; font-family:Times New Roman; font-weight: bold; font-size:40px;">LOGIN</h2><br>
+        <label for="email"></label>
+        <content style="color: white; padding-left:43px; font-size:20px;font-style:bold;">Email:</content>
+        <input style="width: 378px; height: 40px" ; type="email" id="email" name="email"
+          placeholder="Enter you email"><br><br>
+        <label for="password"></label>
+        <content style="color: white;padding-right:0px; font-size:20px;">Password:</content>
+        <input style="width: 378px; height: 40px" ; type="password" id="password" name="password"
+          placeholder="Password"><br><br>
+        <input style="width: 150px; height: 35px; color:#2196f3;" type="submit" value="LOGIN"><br><br>
+        <p class="ab" style="color:white; font-size:20px;">Incase no account please </p>
+        <p class="ab"><a style="color:rgb(4, 134, 240); font-size:20px;" href="signup">Sign Up</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    $("#LoginUser").submit(function (e) {
+      e.preventDefault()
+      $.ajax({
+        url: '/api/login',
+        data: $('#LoginUser').serialize(),
+        type: 'POST',
+        success: function (response) {
+          if (response === "administrator") { window.location.replace("/AdminHome") }
+          else { window.location.replace("/") }
+          console.log(response);
+        },
+        error: function (error) {
+          alert("Wrong password or email entered")
+          console.log(error);
+        }
+      });
+
+    })
+  </script>
+
+</body>
+
+</html>

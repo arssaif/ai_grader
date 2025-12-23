@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Welcome AI Grader</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'css_files/home.css') }}">
+  <style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Raleway", sans-serif
+    }
+
+    body,
+    html {
+      height: 100%;
+      line-height: 1.8;
+    }
+
+    /* Full height image header */
+    .bgimg-1 {
+      background-position: center;
+      background-size: cover;
+      background-image: url("{{ url_for('static', filename='image/vertexes_image.jpg') }}");
+      min-height: 100%;
+    }
+
+    .w3-bar .w3-button {
+      padding: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar (sit on top) -->
+  <div class="w3-top">
+    <div class="w3-row w3-padding w3-black">
+      <div class="w3-col s2">
+        <a href="welcome" class="w3-button w3-block w3-black">WELCOME</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="home" class="w3-button w3-block w3-black">HOME</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="about" class="w3-button w3-block w3-black">ABOUT</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="contact" class="w3-button w3-block w3-black">CONTACT US</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="login" class="w3-button w3-block w3-black">LOGIN</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="signup" class="w3-button w3-block w3-black">SIGN UP</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Header with full-height image -->
+  <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+    <div class="w3-display-left w3-text-white" style="padding:48px; font-weight:bold; margin-top:35px">
+      <span class="w3-hide-small"
+        style="font-size: 64px; font-weight: bold; text-shadow: 2px 2px 4px #000000; color: white;">WELCOME TO AI
+        GRADER</span>
+      <br>
+      <span class="w3-xlarge" style="text-shadow: 2px 2px 4px #0d86c7b9;">Helping Radiolgists ease of pressure and
+        deliver
+        reports on
+        time</span>
+      <br><br>
+      <p><a href="signup" class="button w3-padding-large w3-large w3-margin-top w3-round-xxlarge"
+          style="font-weight: bold; color: white;">Sign Up Now</a></p>
+    </div>
+  </header>
+
+
+  <!-- About Section -->
+  <div class="w3-container" style="padding:128px 16px" id="about">
+    <h3 class="w3-center">ABOUT THE COMPANY</h3>
+    <p class="w3-center w3-large">Key features of our company</p>
+    <div class="w3-row-padding w3-center" style="margin-top:64px">
+      <div class="w3-quarter">
+        <i class="fa fa-desktop w3-margin-bottom w3-jumbo w3-center"
+          style="color: white !important; -webkit-text-fill-color: white !important; text-shadow: 0 4px 15px rgba(0,0,0,0.5);"></i>
+        <p class="w3-large">Responsive</p>
+        <p>You will always get a good response, because every patient matters to us.</p>
+      </div>
+      <div class="w3-quarter">
+        <i class="fa fa-heart w3-margin-bottom w3-jumbo"
+          style="color: white !important; -webkit-text-fill-color: white !important; text-shadow: 0 4px 15px rgba(0,0,0,0.5);"></i>
+        <p class="w3-large">Passion</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore.</p>
+      </div>
+      <div class="w3-quarter">
+        <i class="fa fa-diamond w3-margin-bottom w3-jumbo"
+          style="color: white !important; -webkit-text-fill-color: white !important; text-shadow: 0 4px 15px rgba(0,0,0,0.5);"></i>
+        <p class="w3-large">Design</p>
+        <p>Our product is friendly, easy to use and gives you in detail help.</p>
+      </div>
+      <div class="w3-quarter">
+        <i class="fa fa-cog w3-margin-bottom w3-jumbo"
+          style="color: white !important; -webkit-text-fill-color: white !important; text-shadow: 0 4px 15px rgba(0,0,0,0.5);"></i>
+        <p class="w3-large">Support</p>
+        <p>Our support is active 24/7.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="w3-container w3-blue" style="padding:128px 16px" id="about">
+    <h3 class="w3-center" style="font-weight: bold">ABOUT US</h3>
+    <p class="w3-center w3-large">Key features of our company is we just not only predict the report but also <br> we
+      point out the root cause of the problem, so that you can trust it.</p>
+    <br>
+    <p><a href="about" class="button w3-padding-large w3-center w3-large w3-margin-top"
+        style="font-weight:bold; display: block; margin: auto; width: fit-content;">More About US</a></p>
+  </div>
+
+
+  <!--video our work -->
+  <div class="w3-container" style="padding:128px 16px" id="about">
+    <h1 class="w3-center" style="font-weight: bold">Our Work</h1>
+    <iframe style="border: 5px solid black; display: block; margin: auto;" width="900" height="550"
+      src="https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1&mute=1">
+    </iframe>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w3-center w3-black w3-padding-64">
+    <a href="welcome" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+
+  </footer>
+
+  <script>
+    // Modal Image Gallery
+    function onClick(element) {
+      document.getElementById("img01").src = element.src;
+      document.getElementById("modal01").style.display = "block";
+      var captionText = document.getElementById("caption");
+      captionText.innerHTML = element.alt;
+    }
+
+
+    // Toggle between showing and hiding the sidebar when clicking the menu icon
+    var mySidebar = document.getElementById("mySidebar");
+
+    function w3_open() {
+      if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+      } else {
+        mySidebar.style.display = 'block';
+      }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+      mySidebar.style.display = "none";
+    }
+  </script>
+
+</body>
+
+</html>

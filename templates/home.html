@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+
+  <title>AI Grader</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'css_files/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'css_files/bar.css') }}">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="https://kit.fontawesome.com/6865b98c37.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"
+    integrity="sha256-c9vxcXyAG4paArQG3xk6DjyW/9aHxai2ef9RpMWO44A=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {
+      packages: ['corechart']
+    });
+  </script>
+  <script type="text/javascript">
+    var id1 = "";
+    function reply_click(clicked_id) {
+      id1 = (clicked_id);
+    }
+    var w
+    var patient_n = "";
+    var doc = new jsPDF();
+    var specialElementHandlers =
+    {
+      '#editor': function (element, renderer) {
+        return true;
+      }
+    }
+
+
+    $(document).ready(function () {
+
+      var p_header = document.getElementById("ImageOption");
+      var p_btns = p_header.getElementsByClassName("option1");
+
+      for (var i = 0; i < p_btns.length; i++) {
+        p_btns[i].addEventListener("click", function () {
+          var p_current = document.getElementsByClassName("active");
+          if (p_current.length > 0) {
+            p_current[0].className = p_current[0].className.replace("active", "");
+          }
+          this.className += " active";
+        });
+      }
+
+      var header = document.getElementById("SelectOption");
+      var btns = header.getElementsByClassName("options");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+          var current = document.getElementsByClassName("active");
+          if (current.length > 0) {
+            current[0].className = current[0].className.replace("active", "");
+          }
+          this.className += " active";
+        });
+      }
+
+      // Helper to reset container style
+      function resetContainer() {
+        $(".container-left").removeClass("report-page-white");
+      }
+
+      // Zoom Modal Logic
+      $(document).on('click', '.zoomable', function () {
+        var modal = document.getElementById("zoomModal");
+        var modalImg = document.getElementById("img01");
+        modal.style.display = "block";
+        modalImg.src = this.src;
+      });
+
+      // Close modal when clicking outside image
+      window.onclick = function (event) {
+        var modal = document.getElementById("zoomModal");
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+
+      // #five: Report Generation with PDF Download (Enhanced)
+      $('#five').click(function () {
+        if (id1 === "") {
+          alert('Click Patient Name');
+          return
+        }
+        resetContainer();
+        $(".container-left").html(`<div class="loader-container"><div class="loader"></div><div class="loading-text">Preparing Full Report...</div></div>`)
+        $.ajax({
+          url: '/get_full_report?p_name=' + id1,
+          type: 'GET',
+          success: function (response) {
+            // Apply white background to container for Report
+            $(".container-left").addClass("report-page-white");
+
+            $(".container-left").html(`
+                <div id="report-content" style="width: 100%; padding: 20px; box-sizing: border-box; font-family: 'Poppins', sans-serif;">
+                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px;">
+                        <h2 style="font-weight: bold; margin: 0; color: #333;">Medical Report</h2>
+                        <p style="font-size: 18px; margin-top: 5px; color: #555;">Patient: ${response['image_name']}</p>
+                    </div>
+                    
+                    <div class="report-section-dark">
+                        <h3 style="color: #FFD700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; margin-top: 0;">Diagnosis & Caption</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 15px;">
+                            <div style="flex: 1 1 300px; max-width: 45%;">
+                                <img src="static/heatmap/${response['path']}" style="width: 100%; border: 3px solid white; border-radius: 5px;">
+                                <p style="text-align: center; font-weight: bold; margin-top: 5px;">Heatmap</p>
+                            </div>
+                            <div style="flex: 1 1 300px; max-width: 45%;">
+                                <img src="static/classification/${response['path']}" style="width: 100%; border: 3px solid white; border-radius: 5px;">
+                                <p style="text-align: center; font-weight: bold; margin-top: 5px;">Classification</p>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; border-left: 5px solid #2196F3;">
+                            <p style="font-size: 18px;"><strong>Diagnosis:</strong> ${response['finding']}</p>
+                            <p style="font-size: 18px; font-style: italic;"><strong>Caption:</strong> "${response['caption']}"</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-wrap: nowrap; gap: 10px; justify-content: space-between;">
+                        <div class="report-section-dark" style="flex: 1; min-width: 0;">
+                            <h3 style="color: #FFD700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; margin-top: 0;">Segmentation</h3>
+                            <img src="static/segmentation/${response['path']}" style="width: 100%; height: 180px; object-fit: contain; border-radius: 5px; margin-top: 10px;">
+                        </div>
+                        <div class="report-section-dark" style="flex: 1; min-width: 0;">
+                            <h3 style="color: #FFD700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; margin-top: 0;">Opacity</h3>
+                            <img src="static/opacity/${response['path']}" style="width: 100%; height: 180px; object-fit: contain; border-radius: 5px; margin-top: 10px;">
+                        </div>
+                        <div class="report-section-dark" style="flex: 1; min-width: 0;">
+                            <h3 style="color: #FFD700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; margin-top: 0;">External Devices</h3>
+                            <img src="static/external_devices/${response['path']}" style="width: 100%; height: 180px; object-fit: contain; border-radius: 5px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button id="download-pdf-btn" class="button" style="padding: 12px 30px; font-size: 18px;"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                    </div>
+                </div>
+            `);
+
+            $("#download-pdf-btn").click(function () {
+              var node = document.getElementById('report-content');
+              $("#download-pdf-btn").hide();
+              // Use white background for PDF
+              domtoimage.toPng(node, { bgcolor: '#ffffff' })
+                .then(function (dataUrl) {
+                  var pdf = new jsPDF('p', 'mm', 'a4');
+                  var imgProps = pdf.getImageProperties(dataUrl);
+                  var pdfWidth = pdf.internal.pageSize.getWidth();
+                  var pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                  pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                  // save report with patien name
+                  pdf.save(id1 + '_Report.pdf');
+                  $("#download-pdf-btn").show();
+                })
+                .catch(function (error) {
+                  console.error('oops, something went wrong!', error);
+                  alert('Error generating PDF');
+                  $("#download-pdf-btn").show();
+                });
+            });
+          },
+          error: function (error) {
+            alert('An Error has occurred. Please refresh the page.');
+            console.log(error);
+          }
+        });
+      });
+
+      $("#one").click(function () {
+        resetContainer();
+        $(".container-left").html(upload_image);
+      });
+
+      // #two: X-ray Diagnosis
+      $("#two").click(function () {
+        console.log("immediate diagnosis clicked")
+        if (id1 === "") {
+          alert('Click Patient Name');
+          return
+        }
+        resetContainer();
+        $(".container-left").html(`<div class="loader-container"><div class="loader"></div><div class="loading-text">Loading...</div></div>`)
+        $.ajax({
+          url: '/getdat?p_name=' + id1,
+          type: 'GET',
+          success: function (response) {
+            $(".container-left").html(`
+                <div style="width: 100%; padding: 20px; box-sizing: border-box; color: white; font-family: 'Poppins', sans-serif;">
+                    <!-- Header -->
+                    <div style="text-align: left; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 15px;">
+                        <h2 style="margin: 0; font-size: 28px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Name: ${response['image_name']}</h2>
+                        <h3 style="margin: 10px 0 0 0; font-size: 22px; color: #FFD700; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Diagnosis: ${response['finding']}</h3>
+                    </div>
+
+                    <!-- Images Container -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: flex-start; align-items: flex-start;">
+                        <!-- Heatmap -->
+                        <div style="flex: 1 1 300px; max-width: 100%;">
+                            <div style="position: relative; border: 5px solid white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
+                                <img class="zoomable" src="static/heatmap/${response['path']}" style="width: 100%; height: auto; display: block;">
+                            </div>
+                            <p style="text-align: center; margin-top: 10px; font-size: 18px; font-weight: 500;">Heatmap (Click to Zoom)</p>
+                        </div>
+                        <!-- Classification -->
+                        <div style="flex: 1 1 300px; max-width: 100%;">
+                            <div style="position: relative; border: 5px solid white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
+                                <img class="zoomable" src="static/classification/${response['path']}" style="width: 100%; height: auto; display: block;">
+                            </div>
+                            <p style="text-align: center; margin-top: 10px; font-size: 18px; font-weight: 500;">Classification (Click to Zoom)</p>
+                        </div>
+                    </div>
+
+                    <!-- Caption -->
+                    <div style="margin-top: 30px; background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 15px; border-left: 6px solid #2196F3; backdrop-filter: blur(5px);">
+                        <p style="font-family: 'Times New Roman', serif; font-size: 22px; font-style: italic; margin: 0; line-height: 1.5;">"${response['caption']}"</p>
+                    </div>
+                </div>
+            `);
+          },
+          complete: function () {
+            console.log('Processed');
+          },
+          error: function (error) {
+            alert('An Error has occurred. Please refresh the page.');
+            console.log(error);
+          }
+        });
+      });
+
+      // #three: Captioning
+      $("#three").click(function () {
+        console.log("captioning gen clicked")
+        if (id1 === "") {
+          alert('Click Patient Name');
+          return
+        }
+        resetContainer();
+        $(".container-left").html(`<div class="loader-container"><div class="loader"></div><div class="loading-text">Loading...</div></div>`)
+        $.ajax({
+          url: '/getdat?p_name=' + id1,
+          type: 'GET',
+          success: function (response) {
+            $(".container-left").html(`
+                <div style="width: 100%; padding: 20px; box-sizing: border-box; color: white; font-family: 'Poppins', sans-serif;">
+                     <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                        <div style="flex: 1 1 300px; max-width: 500px;">
+                            <img class="zoomable" src="static/Patient_images/${response['path']}" style="width: 100%; border: 5px solid white; border-radius: 10px;">
+                            <p style="text-align: center; margin-top: 5px;">Click to Zoom</p>
+                        </div>
+                        <div style="flex: 1 1 300px; max-width: 500px; display: flex; align-items: center;">
+                            <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; border-left: 5px solid #2196F3;">
+                                <h3 style="margin-top: 0; color: #FFD700;">Caption</h3>
+                                <p style="font-size: 20px; font-style: italic;">"${response['caption']}"</p>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            `);
+          },
+          error: function (error) {
+            alert('An Error has occurred. Please refresh the page.');
+            console.log(error);
+          }
+        });
+      });
+
+      // #four: Segmentation
+      $("#four").click(function () {
+        console.log("segmentation clicked")
+        if (id1 === "") {
+          alert('Click Patient Name');
+          return
+        }
+        resetContainer();
+        $(".container-left").html(`<div class="loader-container"><div class="loader"></div><div class="loading-text">Loading...</div></div>`)
+        $.ajax({
+          url: '/getsegment?p_name=' + id1,
+          type: 'GET',
+          success: function (response) {
+            $(".container-left").html(`
+                <div style="width: 100%; padding: 20px; box-sizing: border-box; color: white; font-family: 'Poppins', sans-serif;">
+                     <div style="text-align: center;">
+                        <img class="zoomable" src="static/segmentation/${response['path']}" style="max-width: 100%; height: auto; border: 5px solid white; border-radius: 10px;">
+                        <p style="margin-top: 10px; font-weight: bold;">Segmentation (Click to Zoom)</p>
+                     </div>
+                </div>
+            `);
+          },
+          error: function (error) {
+            alert('An Error has occurred. Please refresh the page.');
+            console.log(error);
+          }
+        });
+      });
+
+      // #six: Opacity
+      $("#six").click(function () {
+        console.log("segmentation clicked")
+        if (id1 === "") {
+          alert('Click Patient Name');
+          return
+        }
+        resetContainer();
+        $(".container-left").html(`<div class="loader-container"><div class="loader"></div><div class="loading-text">Loading...</div></div>`)
+        $.ajax({
+          url: '/opacity?p_name=' + id1,
+          type: 'GET',
+          success: function (response) {
+            $(".container-left").html(`
+                <div style="width: 100%; padding: 20px; box-sizing: border-box; color: white; font-family: 'Poppins', sans-serif;">
+                     <div style="text-align: center;">
+                        <img class="zoomable" src="static/opacity/${response['path']}" style="max-width: 100%; height: auto; border: 5px solid white; border-radius: 10px;">
+                        <p style="margin-top: 10px; font-weight: bold;">Opacity (Click to Zoom)</p>
+                     </div>
+                </div>
+            `);
+          },
+          error: function (error) {
+            alert('An Error has occurred. Please refresh the page.');
+            console.log(error);
+          }
+        });
+      });
+
+      // #seven: External Devices
+      $("#seven").click(function () {
+        console.log("external_devices clicked")
+        if (id1 === "") {
+          alert('Click Patient Name');
+          return
+        }
+        resetContainer();
+        $(".container-left").html(`<div class="loader-container"><div class="loader"></div><div class="loading-text">Loading...</div></div>`)
+        $.ajax({
+          url: '/external_devices?p_name=' + id1,
+          type: 'GET',
+          success: function (response) {
+            $(".container-left").html(`
+                <div style="width: 100%; padding: 20px; box-sizing: border-box; color: white; font-family: 'Poppins', sans-serif;">
+                     <div style="text-align: center;">
+                        <img class="zoomable" src="static/external_devices/${response['path']}" style="max-width: 100%; height: auto; border: 5px solid white; border-radius: 10px;">
+                        <p style="margin-top: 10px; font-weight: bold;">External Devices (Click to Zoom)</p>
+                     </div>
+                </div>
+            `);
+          },
+          error: function (error) {
+            alert('An Error has occurred. Please refresh the page.');
+            console.log(error);
+          }
+        });
+      });
+
+      // Upload Button
+      $("#upload-button").click(function () {
+        console.log("upload image clicked")
+        var form_data = new FormData()
+        form_data.append("name", $("#name").val())
+        form_data.append('file', $("#file-picker").prop('files')[0])
+        $.ajax({
+          url: '/upload',
+          type: 'POST',
+          data: form_data,
+          contentType: false,
+          cache: false,
+          processData: false,
+          success: function (response) {
+            if (response === "success") {
+              alert("Image uploaded successfully")
+              location.reload(true);
+            }
+            if (response === "updated") {
+              alert("Image successfully updated")
+              location.reload(true);
+            }
+          },
+          error: function (error) {
+            alert('An Error has occurred. Please refresh the page.');
+            console.log(error);
+          }
+        });
+      });
+
+    }); // End of document.ready
+
+    function changeDivColor(color) {
+      document.getElementById("yourdivid").style.backgroundColor = color;
+    }
+    document.getElementById("$option1").onClick = function () { //when the anchor is clicked
+      changeDivColor("red"); //chang the div color to red
+      setTimeout(function () { //wait 1000 milliseconds (1s) -- see below
+        changeDivColor("white"); //then change it back to white
+      }, 1000);
+    };
+
+
+  </script>
+  <!--
+
+    -->
+
+  <style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: "Poppins", sans-serif
+    }
+
+    body {
+      font-size: 16px;
+    }
+
+    .w3-half img {
+      margin-bottom: -6px;
+      margin-top: 16px;
+      opacity: 0.8;
+      cursor: pointer
+    }
+
+    .w3-half img:hover {
+      opacity: 1
+    }
+
+    .button {
+      background-color: #2196f3;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 16px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 20px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    .button5:hover {
+      background-color: #555555;
+      color: white
+    }
+
+    .option1:hover {
+      background-color: yellow;
+      cursor: pointer;
+    }
+  </style>
+
+
+</head>
+
+
+<body>
+
+  <div class="w3-top">
+    <div class="w3-row w3-padding w3-black">
+      <div class="w3-col s2">
+        <a href="welcome" class="w3-button w3-block w3-black">WELCOME</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="home" class="w3-button w3-block w3-black">HOME</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="about" class="w3-button w3-block w3-black">ABOUT</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="contact" class="w3-button w3-block w3-black">CONTACT US</a>
+      </div>
+      <div class="w3-col s2">
+        <a href="logout" class="w3-button w3-block w3-black">LOGOUT</a>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <nav class="w3-sidebar w3-blue w3-collapse w3-top w3-large w3-padding"
+    style="z-index:3;margin-top:55px;width:300px;font-weight:bold;" id="mySidebar"><br>
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft"
+      style="width:100%;font-size:22px">Close Menu</a>
+    <div class="w3-container">
+      <h1 style="color:white; padding-bottom:0px;margin-right:10px; padding-left:10px; margin-top:15px; color:white;">
+        Dr. {{user_name}}</h1>
+      </li>
+      <h3 class="w3-padding-64"><b>Your Patients<br>Names</b></h3>
+    </div>
+    <div class="w3-bar-block">
+      <div class="wrapper">
+        <div id="ImageOption">
+          <ul>
+            {% if any_uploads%}
+            {% for ins in any_uploads %}
+            <li>
+              <a class="option1" style="color:white;" id="{{ins}}" name="{{ins}}" value="{{ins}}"
+                onClick="reply_click(this.id)">{{ins}}</a>
+            </li>
+            {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- Top menu on small screens -->
+  <header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+    <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">â˜°</a>
+    <span>Company Name</span>
+  </header>
+
+  <!-- Overlay effect when opening sidebar on small screens -->
+  <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu"
+    id="myOverlay"></div>
+
+  <!-- !PAGE CONTENT! -->
+  <div class="w3-main" style="margin-left:340px;margin-right:40px;height:600px">
+
+    <!-- Header -->
+    <div class="w3-container" style="margin-top:80px" id="showcase">
+      <h1 class="w3-xxxlarge w3-text-white"><b>Welcome to AI Grader</b></h1>
+      <h1 class="w3-xxxlarge w3-text-blue"><b>Helping Radiologists</b></h1>
+      <hr style="width:50px;border:5px solid #2196f3" class="w3-round">
+    </div>
+    <br>
+    <div style="display:none;">
+      <div id="upload_image">
+        <div action="upload.php" method="post" enctype="multipart/form-data" style="text-align:center;  border-style:solid ;
+                padding-top: 70px;
+                padding-right: 30px;
+                padding-bottom: 70px;
+                padding-left: 30px;
+                height:630px;
+                border: 10px solid white;
+                outline: 5px solid black;">
+          <h2 style="color:white; font-family:Times New Roman; font-weight:bold;font-size:50px">UPLOAD CHEST X-RAY IMAGE
+          </h2><br>
+
+          <div><label for="name"></label>
+            <input style="width: 378px; height: 40px;" type=name" id="name" name="name" placeholder="Enter Patient Name"
+              required><br><br>
+            <input id="file-picker" type="file" name="file" style="margin-top: 20px;margin-left:420px; width:392px;"
+              accept="image/*" multiple>
+            <div id="msg"></div>
+            <input style="margin-top:100px; height:30px; width:200px;color:black;margin-left:30px" type="submit"
+              value="Upload!" id="upload-button">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-left"
+      style="color:white;margin-left:100px;border: 10px solid black;
+		background-image:url({{url_for('static',filename='image/body_animation.gif')}}); background-size: cover; width: 1150px; height:550px ">
+      <div
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
+        <h2
+          style="text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.5); color: #FFFFFF; font-size:35px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); padding: 8px 15px; border-radius: 10px;">
+          Steps to Obtain Reports:</h2><br>
+        <h2
+          style="text-shadow: 0 0 8px rgba(2, 119, 253, 0.7); color: #E3F2FD; font-size:22px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); padding: 8px 15px; border-radius: 10px;">
+          STEP
+          1:
+          Upload the XRAY image. </h2>
+        <h2
+          style="text-shadow: 0 0 8px rgba(2, 119, 253, 0.7); color: #E3F2FD; font-size:22px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); padding: 8px 15px; border-radius: 10px;">
+          STEP
+          2:
+          Refresh the page. </h2>
+        <h2
+          style="text-shadow: 0 0 8px rgba(2, 119, 253, 0.7); color: #E3F2FD; font-size:22px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); padding: 8px 15px; border-radius: 10px;">
+          STEP
+          3:
+          Select Patient from right panel.</h2>
+        <h2
+          style="text-shadow: 0 0 8px rgba(2, 119, 253, 0.7); color: #E3F2FD; font-size:22px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); padding: 8px 15px; border-radius: 10px;">
+          STEP
+          4:
+          Now select Diagnosis, Report Segmentation from below. </h2>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <br>
+    <div class="w3-container" id="contact" style="margin-top:0px">
+      <div>
+        <div id="SelectOption">
+          <!-- Buttons -->
+          <a id="one" class="button button5 options" style="color:white; text-decoration:none;" href="#"><span
+              class="bi bi-cloud-arrow-up-fill"> </span> Upload X-ray </a>
+          <a id="two" class="button button5 options" style="color:white; text-decoration:none;" href="#"><i
+              class="fas fa-lungs"></i> X-ray Diagnosis</a>
+          <a id="three" class="button button5 options" style="color:white; text-decoration:none;" href="#"><i
+              class="fas fa-lungs"></i> Captioning </a>
+          <a id="four" class="button button5 options" style="color:white; text-decoration:none;" href="#"><i
+              class="fas fa-lungs"></i> Segmentation </a>
+          <a id="five" class="button button5 options" style="color:white; text-decoration:none;" href="#"><i
+              class="fas fa-lungs"></i> Report </a>
+          <a id="six" class="button button5 options" style="color:white; text-decoration:none;" href="#"><i
+              class="fas fa-lungs"></i> Opacity </a>
+          <a id="seven" class="button button5 options" style="color:white; text-decoration:none;" href="#"><i
+              class="fas fa-lungs"></i> External Devices </a>
+        </div>
+      </div>
+
+      <br>
+      <br>
+      <h1 class="w3-xxxlarge w3-text-blue"><b>Contact Us.</b></h1>
+      <hr style="width:50px;border:5px solid #2196f3" class="w3-round">
+      <p>Are you having any problems? Fill out the form and we will get back to you as soon as possible :) Rest
+        Assured,
+        every patient matters to us!</p>
+      <form action="/action_page.php" target="_blank">
+        <div class="w3-section">
+          <label>Name</label>
+          <input class="w3-input w3-border" type="text" name="Name" required>
+        </div>
+        <div class="w3-section">
+          <label>Email</label>
+          <input class="w3-input w3-border" type="text" name="Email" required>
+        </div>
+        <div class="w3-section">
+          <label>Message</label>
+          <input class="w3-input w3-border" type="text" name="Message" required>
+        </div>
+        <button type="submit" class="w3-button w3-block w3-padding-large w3-blue w3-margin-bottom">Send
+          Message</button>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-center w3-black w3-padding-30" style="margin-top:80px">
+      <a href="home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+    </footer>
+
+    <!-- Zoom Modal -->
+    <div id="zoomModal" class="zoom-modal">
+      <span class="close-zoom" onclick="document.getElementById('zoomModal').style.display='none'">&times;</span>
+      <img class="zoom-modal-content" id="img01">
+    </div>
+
+</body>
+
+</html>
