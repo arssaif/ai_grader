@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import cv2
 import matplotlib.cm as cm
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+APP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def save_and_display_gradcam(img_path, heatmap, cam_path, alpha=0.5):
     """
@@ -118,7 +118,7 @@ def heatmap(p1, newName, user_id):
                'Pneumothorax', 'Consolidation', 'Edema', 'Emphysema',
                'Pleural_Thickening', 'No Finding']
 
-    my_model = tf.keras.models.load_model('static/models/heatmap/best-heat-map-model.h5')
+    my_model = tf.keras.models.load_model('static/models/heat_map/best-heat-map-model.h5')
     my_model.summary()
 
     dim = (224, 224, 3)

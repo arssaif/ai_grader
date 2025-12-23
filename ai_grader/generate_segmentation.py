@@ -8,7 +8,7 @@ from matplotlib import pyplot
 import os
 from matplotlib.patches import Rectangle
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+APP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def load_image_pixels(filename, shape):

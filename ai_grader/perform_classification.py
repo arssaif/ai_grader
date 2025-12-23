@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 tf1.disable_v2_behavior()
 import cv2
-APP_ROOT= os.path.dirname(os.path.abspath(__file__))
+APP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def model_working(adder):
     """

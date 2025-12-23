@@ -1,4 +1,7 @@
 import os
+import sys
+import yolo_models
+sys.modules['models'] = yolo_models
 import shutil
 import time
 from pathlib import Path
@@ -10,7 +13,7 @@ from numpy import random
 from utils.torch_utils import select_device
 from yolo_models.experimental import attempt_load
 from utils.general import (non_max_suppression, scale_coords, strip_optimizer, check_img_size)
-APP_ROOT= os.path.dirname(os.path.abspath(__file__))
+APP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 global imgsz

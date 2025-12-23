@@ -37,7 +37,6 @@ def create_chexnet(chexnet_weights=chexnet_weights, input_size=(224, 224)):
     # since we are using attention here
     return chexnet
 
-
 class Image_encoder(tf.keras.layers.Layer):
     """
     This layer will output image backbone features after passing it through chexnet
@@ -59,7 +58,6 @@ class Image_encoder(tf.keras.layers.Layer):
         op = tf.reshape(op, shape=(-1, op.shape[1] * op.shape[2], op.shape[3]))  # op shape: (None,9,1024)
         return op
 
-
 def encoder(image1, dense_dim, dropout_rate):
     """
     Takes image1
@@ -74,7 +72,6 @@ def encoder(image1, dense_dim, dropout_rate):
     bn = BatchNormalization(name="encoder_batch_norm")(bkfeat1)
     dropout = Dropout(dropout_rate, name="encoder_dropout")(bn)
     return dropout
-
 
 class global_attention(tf.keras.layers.Layer):
     """
@@ -100,7 +97,6 @@ class global_attention(tf.keras.layers.Layer):
                                        axis=1)  # summing all context vector over the time period ie input length, output_shape: batch_size*dense_dim
 
         return context_vector, attention_weights
-
 
 class One_Step_Decoder(tf.keras.layers.Layer):
     """
@@ -217,7 +213,6 @@ def create_model():
     model.load_weights(model_save)
 
     return model, tokenizer
-
 
 def greedy_search_predict(image1, model, tokenizer, input_size=(224, 224)):
     """

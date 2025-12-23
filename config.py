@@ -16,7 +16,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(APP_ROOT, 'templates'), static_folder=os.path.join(APP_ROOT, 'static'))
 app.secret_key = "mmmz1234"
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
