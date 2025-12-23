@@ -3,10 +3,10 @@ Flask-Login
 Flask-RESTful	
 flask_sqlalchemy	
 werkzeug
-numpy==1.24.4
-torchvision==0.16.0
+numpy #1.26.4
+torch #2.9.1+cpu
+torchvision #0.24.1+cpu
 pyyaml
-torch==2.1.2
 tensorflow==2.15.0
 joblib
 opencv-python
