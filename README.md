@@ -2,7 +2,7 @@
 
 A comprehensive AI-powered web application for automated chest X-ray analysis, providing multi-modal diagnostic support including disease classification, image segmentation, opacity detection, and automated report generation.
 
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15.0-orange.svg)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.1.2-red.svg)
