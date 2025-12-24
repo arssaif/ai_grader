@@ -7,6 +7,14 @@ A comprehensive AI-powered web application for automated chest X-ray analysis, p
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15.0-orange.svg)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.1.2-red.svg)
 
+<h1 align="center">Demo of WebApp</h1>
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=PaTdifIbTbg&autoplay=1">
+    <img src="https://img.youtube.com/vi/PaTdifIbTbg/0.jpg" alt="Watch the video">
+  </a>
+</p>
+
+
 ## 📋 Table of Contents
 
 - [Features](#-features)
@@ -17,7 +25,6 @@ A comprehensive AI-powered web application for automated chest X-ray analysis, p
 - [AI Models](#-ai-models)
 - [API Documentation](#-api-documentation)
 - [Technologies Used](#-technologies-used)
-- [Youtube Demo](#-youtube-demo)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -333,9 +340,6 @@ Authentication: Required (Session-based)
 - **Pandas**: Data manipulation
 - **joblib**: Model serialization
 - **PyYAML**: Configuration management
-
-## 📸 Youtube Demo
-[![Demo Video](https://img.youtube.com/vi/DOOb9337-p4/0.jpg)](https://www.youtube.com/watch?v=DOOb9337-p4&autoplay=1)
 
 ## 🤝 Contributing
 
